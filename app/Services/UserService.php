@@ -95,7 +95,8 @@ class UserService
             }
             $id = $this->deHash($hashedId, 'user');
             $userUpdateStatus = $this->userRepository->update($id, [
-                'activation_status' => UserActivationStatus::ACTIVE->value
+                'activation_status' => UserActivationStatus::ACTIVE->value,
+                'email_verified_at' => date('Y-m-d H:i:s')
             ]);
             if (!$userUpdateStatus) {
                 throw new UserActivationException();

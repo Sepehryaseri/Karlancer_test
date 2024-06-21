@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\user;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use JetBrains\PhpStorm\ArrayShape;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -17,12 +19,15 @@ class RegisterUserRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
+    #[ArrayShape(['name' => "string", 'email' => "string", 'password' => "string"])]
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|string|confirmed|min:5',
         ];
     }
 }
