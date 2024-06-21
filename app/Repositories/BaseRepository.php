@@ -52,5 +52,13 @@ class BaseRepository implements BaseRepositoryInterface
             ->where('id', $id)
             ->delete();
     }
+
+    public function findBY(string $column, mixed $value): Model|Builder|null
+    {
+        return $this->model
+            ->query()
+            ->where($column, $value)
+            ->first();
+    }
 }
 
