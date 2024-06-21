@@ -110,7 +110,7 @@ class UserService
         }
     }
 
-    protected function sendMail(Mailable $mailable, string $email): bool
+    private function sendMail(Mailable $mailable, string $email): bool
     {
         try {
             Mail::to($email)

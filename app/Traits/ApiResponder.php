@@ -12,7 +12,7 @@ trait ApiResponder
         return $this->response($statusCode, $data, $message);
     }
 
-    public function failed(string $message, int $statusCode = Response::HTTP_BAD_REQUEST,): JsonResponse
+    public function failed(string $message, int $statusCode = Response::HTTP_BAD_REQUEST, array $data = []): JsonResponse
     {
         return $this->response($statusCode, [], $message);
     }
