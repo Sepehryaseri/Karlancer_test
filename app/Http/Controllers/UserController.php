@@ -32,7 +32,7 @@ class UserController extends Controller
         $data = $request->validated();
         $response = $this->userService->login($data);
         if ($response['status'] != Response::HTTP_OK) {
-            return $this->failed($response['status'], $response['message']);
+            return $this->failed($response['message'], $response['status']);
         }
         return $this->success($response['data']);
     }
@@ -41,7 +41,7 @@ class UserController extends Controller
     {
         $response = $this->userService->logout();
         if ($response['status'] != Response::HTTP_OK) {
-            return $this->failed($response['status'], $response['message']);
+            return $this->failed($response['message'], $response['status']);
         }
         return $this->success(message: $response['message']);
     }

@@ -13,4 +13,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         parent::__construct($user);
     }
+
+    public function logout()
+    {
+
+    }
 }

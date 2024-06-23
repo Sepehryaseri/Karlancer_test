@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests\user;
 
-use App\Http\Requests\BaseRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use JetBrains\PhpStorm\ArrayShape;
 
-class RegisterUserRequest extends BaseRequest
+class RegisterUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +25,9 @@ class RegisterUserRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'password' => 'required|string|confirmed|min:5',
+            'name' => 'string|required',
+            'email' => 'email|required',
+            'password' => 'string|confirmed|min:5|required',
         ];
     }
 }

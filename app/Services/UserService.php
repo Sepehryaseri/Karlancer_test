@@ -56,7 +56,7 @@ class UserService
     {
         try {
             $user = $this->userRepository->findBY('email', $data['email']);
-            if (!$user || Hash::check($data['password'], $user->password)) {
+            if (!$user || !Hash::check($data['password'], $user->password)) {
                 throw new CredentialException();
             }
             if ($user->activation_status != UserActivationStatus::ACTIVE->value) {
@@ -76,7 +76,7 @@ class UserService
     public function logout(): array
     {
         try {
-            $this->user->tokens()->delete();
+            auth()->user()->tokens()->delete();
             return [
                 'status' => Response::HTTP_BAD_REQUEST,
                 'message' => __('user.logout'),
