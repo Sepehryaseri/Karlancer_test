@@ -23,5 +23,5 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     Route::post('registration', 'register');
     Route::get('login', 'login');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
-    Route::put('{hashed_id}', 'activateProfile');
+    Route::get('activation/{hashed_id}', 'activateProfile');
 });

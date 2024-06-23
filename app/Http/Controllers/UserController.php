@@ -50,7 +50,7 @@ class UserController extends Controller
     {
         $response = $this->userService->activateProfile($hashId);
         if ($response['status'] != Response::HTTP_OK) {
-            return $this->failed($response['status'], $response['message']);
+            return $this->failed($response['message'], $response['status']);
         }
         return $this->success(message: $response['message']);
     }

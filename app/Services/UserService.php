@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\UserActivationStatus;
+use App\Events\UserRegisterEvent;
 use App\Exceptions\EmailException;
 use App\Exceptions\user\ActivationException;
 use App\Exceptions\user\CredentialException;
@@ -14,10 +15,12 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\Exceptionable;
 use App\Traits\HashIdConverter;
 use Exception;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserService
@@ -38,11 +41,7 @@ class UserService
             if (!$user) {
                 throw new RegistrationException();
             }
-            $emailSentStatus = $this->sendMail(new ActivationMail($user['id']), $user['email']);
-            if (!$emailSentStatus) {
-                throw new EmailException();
-            }
-            Cache::set('activation_pending_' . $user['id'], 1, 86400);
+            event(new UserRegisterEvent($user));
             return [
                 'status' => Response::HTTP_CREATED,
                 'data' => $user,
@@ -107,17 +106,6 @@ class UserService
             ];
         } catch (Exception $exception) {
             return $this->except($exception);
-        }
-    }
-
-    private function sendMail(Mailable $mailable, string $email): bool
-    {
-        try {
-            Mail::to($email)
-                ->send($mailable);
-            return true;
-        } catch (Exception $exception) {
-            return false;
         }
     }
 

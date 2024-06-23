@@ -6,7 +6,7 @@ use App\Traits\HashIdConverter;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
-class HashIdCast implements C
+class HashIdCast implements CastsAttributes
 {
     use HashIdConverter;
 

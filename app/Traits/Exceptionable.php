@@ -12,7 +12,7 @@ trait Exceptionable
     public function except(Exception $exception): array
     {
         return [
-            'status' => $exception->getCode(),
+            'status' => 400,
             'message' => $exception->getMessage()
         ];
     }

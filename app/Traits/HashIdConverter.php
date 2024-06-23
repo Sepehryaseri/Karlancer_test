@@ -6,11 +6,10 @@ use Hashids\Hashids;
 
 trait HashIdConverter
 {
-    private readonly int $hashLength;
+    protected int $hashLength = 15;
 
     public function __construct()
     {
-        $this->hashLength = 15;
     }
 
     public function hash(int $id, string $key): string
