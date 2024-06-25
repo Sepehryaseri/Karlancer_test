@@ -55,7 +55,9 @@ class UserService
     public function login(array $data): array
     {
         try {
-            $user = $this->userRepository->findBY('email', $data['email']);
+            $user = $this->userRepository->findBY([
+                ['email', '=', $data['email']]
+            ]);
             if (!$user || !Hash::check($data['password'], $user->password)) {
                 throw new CredentialException();
             }
