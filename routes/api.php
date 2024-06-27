@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TaskTitleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -27,16 +28,16 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     Route::get('activation/{hashed_id}', 'activateProfile');
 });
 
-Route::prefix('task-titles')->middleware('auth:sanctum')->controller(TaskTitleController::class)->group(function () {
+Route::prefix('task-titles')->controller(TaskTitleController::class)->middleware('auth:sanctum')->group(function () {
     Route::post('', 'create');
     Route::get('', 'getList');
     Route::get('{title_id}', 'get');
     Route::put('{title_id}', 'update');
-    Route::delete('{title_id}', 'delete');
+    Route::delete('{title_id}', 'delete')->middleware('auth:sanctum');
 });
 
 
-Route::prefix('categories')->middleware('auth:sanctum')->controller()->group(function () {
+Route::prefix('categories')->middleware('auth:sanctum')->controller(CategoryController::class)->group(function () {
     Route::post('', 'create');
     Route::get('', 'getList');
     Route::get('{category_id}', 'get');

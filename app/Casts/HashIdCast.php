@@ -10,14 +10,18 @@ class HashIdCast implements CastsAttributes
 {
     use HashIdConverter;
 
+    public function __construct(public string $keyName)
+    {
+    }
+
     /**
      * Cast the given value.
      *
      * @param  array<string, mixed>  $attributes
      */
-    public function get(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function get(Model $model, string $key, mixed $value, array $attributes): string
     {
-        return $value;
+        return $this->hash($value, $this->keyName);
     }
 
     /**
@@ -27,6 +31,7 @@ class HashIdCast implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $this->hash($value, 'user');
+        return $value;
+//        return $this->deHash($value, $this->keyName);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\HashIdCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,8 @@ class TaskTitle extends Model
         'user_id',
         'due_date',
     ];
+
+    protected $hidden = ['pivot'];
 
     public function user(): BelongsTo
     {

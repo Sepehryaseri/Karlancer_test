@@ -20,7 +20,7 @@ class TaskTitleService
 
     public function __construct(private readonly TaskTitleRepositoryInterface $taskTitleRepository)
     {
-        $this->user = auth()->user();
+        $this->user = auth('sanctum')->user();
     }
 
     private function assignCategories(array $categories, TaskTitle|Builder $taskTitle): array
@@ -91,7 +91,7 @@ class TaskTitleService
                 ['user_id', '=', $this->user->id]
             ], [
                 'categories:id,name',
-                'tasks: id,name'
+                'tasks:task_title_id,id,name'
             ]);
             if (!isset($taskTitle)) {
                 throw new NotFoundResourceException(__('taskTitle.not_found'), 404);
