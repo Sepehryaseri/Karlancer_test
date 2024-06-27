@@ -29,8 +29,11 @@ class CategoryRule implements ValidationRule
             $fail('category.wrong_id')->translate();
         }
 
-        $category = $this->categoryRepository->first($categoryId)->toArray();
-        if (empty($category)) {
+        $category = $this->categoryRepository->findBY([
+            ['id' , '=', $categoryId],
+            ['user_id', '=', auth('sanctum')->id()]
+        ]);
+        if (!isset($category)) {
             $fail('category.not_match')->translate();
         }
     }

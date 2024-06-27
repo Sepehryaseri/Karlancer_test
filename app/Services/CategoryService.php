@@ -40,7 +40,7 @@ class CategoryService
     {
         try {
             $categories = $this->categoryRepository->get(function (Builder $builder) use ($data) {
-               $builder->when(!empty($data['name']), function (\Illuminate\Database\Query\Builder $query) use ($data) {
+               return $builder->when(!empty($data['name']), function (Builder $query) use ($data) {
                    $query->where('name', 'LIKE', '%'.$data['name'].'%');
                })
                    ->where('user_id', $this->user->id);

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Traits\HashIdConverter;
 use Closure;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository implements BaseRepositoryInterface
 {
+    use HashIdConverter;
 
     public function __construct(protected Model $model)
     {
@@ -27,10 +29,17 @@ class BaseRepository implements BaseRepositoryInterface
         $result = $this->model->query();
         $result = $filter($result);
         if (empty($data['page'])) {
-            return $result->get($columns);
+            $result = $result->get($columns);
+        } else {
+            $result = $result->paginate(perPage: $data['size'], columns: $columns, page: $data['page']);
         }
 
-        return $result->paginate(perPage: $data['size'], columns: $columns, page: $data['page']);
+        $className = get_class($this->model);
+        $keyName = strtolower(last(explode('\\', $className)));
+        $result->each(function ($item) use ($keyName) {
+            $item->id = $this->hash($item['id'], $keyName);
+        });
+        return $result;
     }
 
     public function first(int $id, array $with = []): Model|Builder|null

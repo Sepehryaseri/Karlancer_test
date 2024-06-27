@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
-    public function __construct(User $user)
+    public function __construct(protected User $user)
     {
         parent::__construct($user);
     }

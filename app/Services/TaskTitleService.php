@@ -28,7 +28,7 @@ class TaskTitleService
         try {
             $categoriesIds = [];
             foreach ($categories as $categoryId) {
-                $categoryId[] = $this->deHash($categoryId, 'category');
+                $categoriesIds[] = $this->deHash($categoryId, 'category');
             }
             $this->taskTitleRepository->syncCategories($taskTitle, $categoriesIds);
             return [

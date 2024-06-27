@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TaskTitleRepository extends BaseRepository implements TaskTitleRepositoryInterface
 {
-    public function __construct(TaskTitle $taskTitle)
+    public function __construct(protected TaskTitle $taskTitle)
     {
         parent::__construct($taskTitle);
     }

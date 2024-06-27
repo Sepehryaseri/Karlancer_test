@@ -3,6 +3,7 @@
 namespace App\Http\Requests\TaskTitle;
 
 use App\Rules\CategoryRule;
+use App\Rules\DueDateRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -30,9 +31,9 @@ class CreateTaskTitleRequest extends FormRequest
     {
         return [
             'name' => 'string|required',
-            'due_date' => 'date_format:Y-m-d H:i:s|nullable',
-            'categories' => 'array|nullable',
-            'categories:*' => ['string', $this->categoryRule]
+            'due_date' => ['date_format:Y-m-d H:i:s', 'nullable', new DueDateRule],
+            'categories' => ['array', 'nullable'],
+            'categories.*' => ['string', $this->categoryRule]
         ];
     }
 }

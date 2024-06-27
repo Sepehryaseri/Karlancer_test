@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
-    public function __construct(Category $category)
+    public function __construct(protected Category $category)
     {
         parent::__construct($category);
     }

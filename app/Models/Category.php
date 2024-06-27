@@ -16,12 +16,16 @@ class Category extends Model
         'user_id'
     ];
 
+    protected $casts = [
+       'id' => 'string'
+    ];
+
     protected $hidden = ['pivot'];
 
 
     public function task_titles(): BelongsToMany
     {
-        return $this->belongsToMany(TaskTitle::class, 'category_title');
+        return $this->belongsToMany(TaskTitle::class, 'category_title')->withTimestamps();
     }
 
 }
