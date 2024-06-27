@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\TaskTitle;
 
-use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Rules\CategoryRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use JetBrains\PhpStorm\ArrayShape;
 
 class CreateTaskTitleRequest extends FormRequest
 {

@@ -28,7 +28,7 @@ class CategoryService
             $data['user_id'] = $this->user->id;
             $category = $this->categoryRepository->create($data);
             return [
-                'status' => Response::HTTP_OK,
+                'status' => Response::HTTP_CREATED,
                 'message' => __('category.created'),
             ];
         } catch (Exception $exception) {

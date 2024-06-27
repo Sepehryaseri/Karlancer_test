@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetTaskTitleListRequest extends FormRequest
+class CreateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,7 @@ class GetTaskTitleListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|nullable',
-            'from_date' => 'date_format: Y-m-d',
-            'to_date' => 'date_format:Y-m-d|required_with:from_date'
+            'name' => 'string|required'
         ];
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateTaskTitleRequest;
-use App\Http\Requests\GetTaskTitleListRequest;
-use App\Http\Requests\UpdateTaskTitleListRequest;
+use App\Http\Requests\TaskTitle\CreateTaskTitleRequest;
+use App\Http\Requests\TaskTitle\GetTaskTitleListRequest;
+use App\Http\Requests\TaskTitle\UpdateTaskTitleListRequest;
 use App\Services\TaskTitleService;
 use App\Traits\ApiResponder;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaskTitleController extends Controller
@@ -52,7 +51,7 @@ class TaskTitleController extends Controller
     {
         $data = $request->validated();
         $response = $this->taskTitleService->update($taskTitleId, $data);
-        if ($response['status'] != Response::HTTP_CREATED) {
+        if ($response['status'] != Response::HTTP_OK) {
             return $this->failed($response['message']);
         }
 
@@ -62,7 +61,7 @@ class TaskTitleController extends Controller
     public function delete(string $taskTitleId)
     {
         $response = $this->taskTitleService->delete($taskTitleId);
-        if ($response['status'] != Response::HTTP_CREATED) {
+        if ($response['status'] != Response::HTTP_OK) {
             return $this->failed($response['message']);
         }
         return $this->success(message: $response['message'], statusCode: $response['status']);

@@ -12,7 +12,8 @@ class Task extends Model
 
     protected $fillable = [
         'name',
-        'task_title_id'
+        'task_title_id',
+        'status',
     ];
 
     public function taskTitle(): BelongsTo

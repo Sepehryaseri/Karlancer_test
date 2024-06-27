@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCategoryRequest;
-use App\Http\Requests\GetCategoryListRequest;
-use App\Http\Requests\UpdateCategoryListRequest;
+use App\Http\Requests\Category\CreateCategoryRequest;
+use App\Http\Requests\Category\GetCategoryListRequest;
+use App\Http\Requests\TaskTitle\UpdateCategoryListRequest;
 use App\Services\CategoryService;
 use App\Traits\ApiResponder;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
@@ -52,7 +51,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
         $response = $this->categoryService->update($categoryHashId, $data);
-        if ($response['status'] != Response::HTTP_CREATED) {
+        if ($response['status'] != Response::HTTP_OK) {
             return $this->failed($response['message']);
         }
 
@@ -62,7 +61,7 @@ class CategoryController extends Controller
     public function delete(string $categoryHashId)
     {
         $response = $this->categoryService->delete($categoryHashId);
-        if ($response['status'] != Response::HTTP_CREATED) {
+        if ($response['status'] != Response::HTTP_OK) {
             return $this->failed($response['message']);
         }
         return $this->success(message: $response['message'], statusCode: $response['status']);

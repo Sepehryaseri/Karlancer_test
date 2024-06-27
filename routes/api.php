@@ -1,8 +1,11 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\TaskTitleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{
+    CategoryController,
+    TaskController,
+    TaskTitleController,
+    UserController
+};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,4 +46,11 @@ Route::prefix('categories')->middleware('auth:sanctum')->controller(CategoryCont
     Route::get('{category_id}', 'get');
     Route::put('{category_id}', 'update');
     Route::delete('{category_id}', 'delete');
+});
+
+Route::prefix('tasks')->middleware('auth:sanctum')->controller(TaskController::class)->group(function () {
+    Route::post('{task_title_id}', 'create');
+    Route::get('{task_title_id}', 'getList');
+    Route::put('{task_id}', 'update');
+    Route::delete('{task_id}', 'delete');
 });

@@ -82,7 +82,7 @@ class TaskTitleService
         }
     }
 
-    private function find(string $taskTitleId): array
+    public function find(string $taskTitleId): array
     {
         try {
             $taskTitleId = $this->deHash($taskTitleId, 'task_title');
