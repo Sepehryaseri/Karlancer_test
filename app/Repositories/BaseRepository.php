@@ -34,11 +34,6 @@ class BaseRepository implements BaseRepositoryInterface
             $result = $result->paginate(perPage: $data['size'], columns: $columns, page: $data['page']);
         }
 
-        $className = get_class($this->model);
-        $keyName = strtolower(last(explode('\\', $className)));
-        $result->each(function ($item) use ($keyName) {
-            $item->id = $this->hash($item['id'], $keyName);
-        });
         return $result;
     }
 

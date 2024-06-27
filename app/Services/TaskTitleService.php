@@ -61,18 +61,26 @@ class TaskTitleService
         try {
             $taskTitles = $this->taskTitleRepository->get(function (Builder $builder) use ($data) {
                 return $builder
-                    ->when(!empty($data['name']), function (\Illuminate\Database\Query\Builder $query) use ($data) {
+                    ->when(!empty($data['name']), function (Builder $query) use ($data) {
                         $query->where('name', 'LIKE', '%' . $data['name'] . '%');
                     })
-                    ->when(!empty($data['from_date']), function (\Illuminate\Database\Query\Builder $query) use ($data) {
-                        $query->whereDate('due_date', '<=', date('Y-m-d 00:00:00', strtotime($data['from_date'])));
+                    ->when(!empty($data['from_date']), function (Builder $query) use ($data) {
+                        $query->whereDate('due_date', '>=', date('Y-m-d 00:00:00', strtotime($data['from_date'])));
                     })
-                    ->when(!empty($data['to_date']), function (\Illuminate\Database\Query\Builder $query) use ($data) {
-                        $query->whereDate('due_date', '>=', date('Y-m-d 23:59:59', strtotime($data['to_date'])));
+                    ->when(!empty($data['to_date']), function (Builder $query) use ($data) {
+                        $query->whereDate('due_date', '<=', date('Y-m-d 23:59:59', strtotime($data['to_date'])));
                     })
                     ->where('user_id', '=', $this->user->id)
                     ->with(['categories:id,name']);
             });
+
+            $taskTitles->each(function ($item) {
+                $item->id = $this->hash($item->id, 'task_title');
+                $item->categories->each(function ($item) {
+                   $item->id = $this->hash($item->id, 'category');
+                });
+            });
+
             return [
                 'status' => Response::HTTP_OK,
                 'data' => $taskTitles->toArray()
@@ -93,10 +101,13 @@ class TaskTitleService
                 'categories:id,name',
                 'tasks:task_title_id,id,name'
             ]);
+            $taskTitle->id = $this->hash($taskTitle->id, 'task_title');
+            $taskTitle->categories->each(function ($item) {
+                $item->id = $this->hash($item->id, 'category');
+            });
             if (!isset($taskTitle)) {
                 throw new NotFoundResourceException(__('taskTitle.not_found'), 404);
             }
-
             return [
                 'status' => Response::HTTP_OK,
                 'data' => $taskTitle,

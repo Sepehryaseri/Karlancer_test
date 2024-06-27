@@ -24,8 +24,8 @@ class GetTaskTitleListRequest extends FormRequest
     {
         return [
             'name' => 'string|nullable',
-            'from_date' => 'date_format: Y-m-d',
-            'to_date' => 'date_format:Y-m-d|required_with:from_date'
+            'from_date' => 'date|date_format:Y-m-d',
+            'to_date' => 'date_format:Y-m-d'
         ];
     }
 }

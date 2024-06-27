@@ -45,6 +45,11 @@ class CategoryService
                })
                    ->where('user_id', $this->user->id);
             });
+
+            $categories->each(function ($item) {
+                $item->id = $this->hash($item->id, 'category');
+            });
+
             return [
                 'status' => Response::HTTP_OK,
                 'data' => $categories->toArray(),
