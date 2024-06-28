@@ -18,7 +18,7 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
     public function getTask(int $taskId, int $userId): Model|Builder|null
     {
         return $this->task->query()
-            ->whereHas('task_title', function (Builder $builder) use ($userId) {
+            ->whereHas('taskTitle', function (Builder $builder) use ($userId) {
                 $builder->where('user_id', $userId);
             })
             ->where('tasks.id', $taskId)

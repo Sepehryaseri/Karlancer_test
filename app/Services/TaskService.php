@@ -49,7 +49,10 @@ class TaskService
                 throw new Exception(message: $taskTitleResult['message'], code: $taskTitleResult['status']);
             }
             $tasks = $this->taskRepository->get(function (Builder $builder) use ($taskTitleResult) {
-                $builder->where('task_title_id', $taskTitleResult['id']);
+                return $builder->where('task_title_id', $taskTitleResult['id']);
+            });
+            $tasks->each(function ($item) {
+                $item->id = $this->hash($item->id, 'task');
             });
             return [
                 'status' => Response::HTTP_OK,
