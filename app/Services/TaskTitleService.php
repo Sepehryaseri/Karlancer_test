@@ -102,7 +102,7 @@ class TaskTitleService
                 ['user_id', '=', $this->user->id]
             ], [
                 'categories:id,name',
-                'tasks:task_title_id,id,name'
+                'tasks:task_title_id,id,name,status'
             ]);
 
             if (!isset($taskTitle)) {
@@ -129,6 +129,9 @@ class TaskTitleService
             $taskTitle->id = $this->hash($taskTitle->id, 'task_title');
             $taskTitle->categories->each(function ($item) {
                 $item->id = $this->hash($item->id, 'category');
+            });
+            $taskTitle->tasks->each(function ($item) {
+                $item->id = $this->hash($item->id, 'task');
             });
             return [
                 'status' => Response::HTTP_OK,

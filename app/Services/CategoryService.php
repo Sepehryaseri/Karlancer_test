@@ -126,7 +126,7 @@ class CategoryService
             $this->categoryRepository->delete($result['id']);
             return [
                 'status' => Response::HTTP_OK,
-                'message' => __('taskTitle.deleted'),
+                'message' => __('category.deleted'),
             ];
         } catch (Exception $exception) {
             return $this->except($exception);
