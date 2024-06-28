@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Exception;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 
 trait Exceptionable
@@ -11,9 +12,17 @@ trait Exceptionable
 
     public function except(Exception $exception): array
     {
+        if ($exception instanceof UniqueConstraintViolationException) {
+            $status = 409;
+            $message = __('public.already_exist');
+        } else {
+            $status = 400;
+            $message = $exception->getMessage();
+        }
+
         return [
-            'status' => 400,
-            'message' => $exception->getMessage()
+            'status' => $status,
+            'message' => $message
         ];
     }
 }

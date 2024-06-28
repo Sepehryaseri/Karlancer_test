@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('task_title_id')->references('id')->on('task_titles')->onDelete('cascade');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

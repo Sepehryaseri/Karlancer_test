@@ -17,6 +17,6 @@ class TaskTitleRepository extends BaseRepository implements TaskTitleRepositoryI
 
     public function syncCategories(TaskTitle|Builder $taskTitle, array $categoryIds)
     {
-        $taskTitle->categories()->sync($categoryIds);
+       $taskTitle->categories()->sync($categoryIds);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\TaskTitle\AssignCategoryTitleException;
 use App\Models\TaskTitle;
 use App\Models\User;
 use App\Repositories\Contracts\TaskTitleRepositoryInterface;
@@ -9,6 +10,7 @@ use App\Traits\Exceptionable;
 use App\Traits\HashIdConverter;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
@@ -43,6 +45,7 @@ class TaskTitleService
     {
         try {
             $data['user_id'] = $this->user->id;
+            $insertedData = Arr::except($data, 'categories');
             $taskTitle = $this->taskTitleRepository->create($data);
             if (isset($data['categories'])) {
                 $this->assignCategories($data['categories'], $taskTitle);
@@ -101,10 +104,7 @@ class TaskTitleService
                 'categories:id,name',
                 'tasks:task_title_id,id,name'
             ]);
-            $taskTitle->id = $this->hash($taskTitle->id, 'task_title');
-            $taskTitle->categories->each(function ($item) {
-                $item->id = $this->hash($item->id, 'category');
-            });
+
             if (!isset($taskTitle)) {
                 throw new NotFoundResourceException(__('taskTitle.not_found'), 404);
             }
@@ -125,9 +125,14 @@ class TaskTitleService
             if ($result['status'] != Response::HTTP_OK) {
                 throw new Exception($result['message'], $result['status']);
             }
+            $taskTitle = $result['data'];
+            $taskTitle->id = $this->hash($taskTitle->id, 'task_title');
+            $taskTitle->categories->each(function ($item) {
+                $item->id = $this->hash($item->id, 'category');
+            });
             return [
                 'status' => Response::HTTP_OK,
-                'data' => $result['data']->toArray(),
+                'data' => $taskTitle->toArray(),
             ];
         } catch (Exception $exception) {
             return $this->except($exception);
@@ -141,10 +146,17 @@ class TaskTitleService
             if ($result['status'] != Response::HTTP_OK) {
                 throw new Exception($result['message'], $result['status']);
             }
-            $this->taskTitleRepository->update($result['id'], $data);
+            $updatedData = Arr::except($data, 'categories');
+            $updated = $this->taskTitleRepository->update($result['id'], $updatedData);
+            if (!$updated) {
+                throw new Exception(__('taskTitle.not_updated'));
+            }
             $taskTitle = $result['data'];
             if (isset($data['categories'])) {
-                $this->assignCategories($data['categories'], $taskTitle);
+                $result = $this->assignCategories($data['categories'], $taskTitle);
+                if ($result['status'] != Response::HTTP_OK) {
+                    throw new AssignCategoryTitleException();
+                }
             }
             return [
                 'status' => Response::HTTP_OK,

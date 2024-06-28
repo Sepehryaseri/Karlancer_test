@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TaskTitle extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -22,7 +23,10 @@ class TaskTitle extends Model
         'id' => 'string',
     ];
 
-    protected $hidden = ['pivot'];
+    protected $hidden = [
+        'pivot',
+        'deleted_at'
+    ];
 
     public function user(): BelongsTo
     {

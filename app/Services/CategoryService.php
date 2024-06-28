@@ -64,8 +64,8 @@ class CategoryService
         try {
             $categoryId = $this->deHash($categoryHashId, 'category');
             $category = $this->categoryRepository->findBY([
-                ['id' => $categoryId],
-                ['user_id' => $this->user->id]
+                ['id', '=', $categoryId],
+                ['user_id', '=', $this->user->id]
             ]);
             if (!isset($category)) {
                 throw new NotFoundResourceException(__('taskTitle.not_found'), 404);
@@ -74,7 +74,7 @@ class CategoryService
             return [
                 'status' => 200,
                 'id' => $categoryId,
-                'data' => $category->toArray(),
+                'data' => $category,
             ];
         } catch (Exception $exception) {
             return $this->except($exception);
@@ -84,13 +84,15 @@ class CategoryService
     public function get(string $categoryHashId): array
     {
         try {
-            $result = $this->find($categoryHashId);
-            if ($result['status'] != Response::HTTP_OK) {
-                throw new Exception(message: $result['message'], code: $result['status']);
+            $categoryResult = $this->find($categoryHashId);
+            if ($categoryResult['status'] != Response::HTTP_OK) {
+                throw new Exception(message: $categoryResult['message'], code: $categoryResult['status']);
             }
+            $category = $categoryResult['data'];
+            $category->id = $this->hash($category->id, 'category');
             return [
                 'status' => Response::HTTP_OK,
-                'data' => $result['data']
+                'data' => $category->toArray(),
             ];
         } catch (Exception $exception) {
             return $this->except($exception);

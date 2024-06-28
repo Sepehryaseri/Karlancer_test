@@ -41,6 +41,7 @@ class UserService
             if (!$user) {
                 throw new RegistrationException();
             }
+            $user['id'] = $this->hash($user['id'], 'user');
             event(new UserRegisterEvent($user));
             return [
                 'status' => Response::HTTP_CREATED,
