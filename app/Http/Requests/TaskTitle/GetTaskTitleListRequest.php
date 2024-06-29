@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\user;
+namespace App\Http\Requests\TaskTitle;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use JetBrains\PhpStorm\ArrayShape;
 
-class RegisterUserRequest extends FormRequest
+class GetTaskTitleListRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +20,12 @@ class RegisterUserRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array|string>
      */
-    #[ArrayShape(['name' => "string", 'email' => "string", 'password' => "string"])]
     public function rules(): array
     {
         return [
-            'name' => 'string|required',
-            'email' => 'email|required',
-            'password' => 'string|confirmed|min:5|required',
+            'name' => 'string|nullable',
+            'from_date' => 'date|date_format:Y-m-d',
+            'to_date' => 'date_format:Y-m-d'
         ];
     }
 }

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\user;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use JetBrains\PhpStorm\ArrayShape;
 
-class RegisterUserRequest extends FormRequest
+class CreateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +20,10 @@ class RegisterUserRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array|string>
      */
-    #[ArrayShape(['name' => "string", 'email' => "string", 'password' => "string"])]
     public function rules(): array
     {
         return [
-            'name' => 'string|required',
-            'email' => 'email|required',
-            'password' => 'string|confirmed|min:5|required',
+            'name' => 'string|required'
         ];
     }
 }

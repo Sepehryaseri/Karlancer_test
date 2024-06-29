@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Traits\HashIdConverter;
+use Closure;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository implements BaseRepositoryInterface
 {
+    use HashIdConverter;
 
     public function __construct(protected Model $model)
     {
@@ -21,21 +24,27 @@ class BaseRepository implements BaseRepositoryInterface
             ->create($data);
     }
 
-    public function get(array $columns): Collection|LengthAwarePaginator|array
+    public function get(Closure $filter, array $columns = ['*']): Collection|LengthAwarePaginator|array
     {
         $result = $this->model->query();
+        $result = $filter($result);
         if (empty($data['page'])) {
-            return $result->get($columns);
+            $result = $result->get($columns);
+        } else {
+            $result = $result->paginate(perPage: $data['size'], columns: $columns, page: $data['page']);
         }
 
-        return $result->paginate(perPage: $data['size'], columns: $columns, page: $data['page']);
+        return $result;
     }
 
-    public function first(int $id): Model|Builder|null
+    public function first(int $id, array $with = []): Model|Builder|null
     {
-        return $this->model->query()
-            ->where('id', $id)
-            ->first();
+        $result = $this->model->query()
+            ->where('id', $id);
+        if (!empty($with)) {
+            $result = $result->with($with);
+        }
+        return $result->first();
     }
 
     public function update(int $id, array $data): int
@@ -53,12 +62,15 @@ class BaseRepository implements BaseRepositoryInterface
             ->delete();
     }
 
-    public function findBY(string $column, mixed $value): Model|Builder|null
+    public function findBY(array $conditions, array $with = []): Model|Builder|null
     {
-        return $this->model
+        $result = $this->model
             ->query()
-            ->where($column, $value)
-            ->first();
+            ->where($conditions);
+        if (!empty($with)) {
+            $result = $result->with($with);
+        }
+        return $result->first();
     }
 }
 

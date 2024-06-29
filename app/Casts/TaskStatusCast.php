@@ -2,18 +2,12 @@
 
 namespace App\Casts;
 
-use App\Traits\HashIdConverter;
+use App\Enums\TaskStatus;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
-class HashIdCast implements CastsAttributes
+class TaskStatusCast implements CastsAttributes
 {
-    use HashIdConverter;
-
-    public function __construct(public string $keyName)
-    {
-    }
-
     /**
      * Cast the given value.
      *
@@ -21,7 +15,7 @@ class HashIdCast implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): string
     {
-        return $this->hash($value, $this->keyName);
+        return $value ? TaskStatus::COMPLETE->label() : TaskStatus::IN_COMPLETE->label();
     }
 
     /**

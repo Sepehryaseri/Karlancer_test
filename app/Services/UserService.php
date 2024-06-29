@@ -41,6 +41,7 @@ class UserService
             if (!$user) {
                 throw new RegistrationException();
             }
+            $user['id'] = $this->hash($user['id'], 'user');
             event(new UserRegisterEvent($user));
             return [
                 'status' => Response::HTTP_CREATED,
@@ -55,8 +56,10 @@ class UserService
     public function login(array $data): array
     {
         try {
-            $user = $this->userRepository->findBY('email', $data['email']);
-            if (!$user || Hash::check($data['password'], $user->password)) {
+            $user = $this->userRepository->findBY([
+                ['email', '=', $data['email']]
+            ]);
+            if (!$user || !Hash::check($data['password'], $user->password)) {
                 throw new CredentialException();
             }
             if ($user->activation_status != UserActivationStatus::ACTIVE->value) {
@@ -76,7 +79,7 @@ class UserService
     public function logout(): array
     {
         try {
-            $this->user->tokens()->delete();
+            auth()->user()->tokens()->delete();
             return [
                 'status' => Response::HTTP_BAD_REQUEST,
                 'message' => __('user.logout'),
