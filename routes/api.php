@@ -31,26 +31,27 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
     Route::get('activation/{hashed_id}', 'activateProfile');
 });
 
-Route::prefix('task-titles')->controller(TaskTitleController::class)->middleware('auth:sanctum')->group(function () {
-    Route::post('', 'create');
-    Route::get('', 'getList');
-    Route::get('{title_id}', 'get');
-    Route::put('{title_id}', 'update');
-    Route::delete('{title_id}', 'delete')->middleware('auth:sanctum');
-});
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('task-titles')->controller(TaskTitleController::class)->group(function () {
+        Route::post('', 'create');
+        Route::get('', 'getList');
+        Route::get('{title_id}', 'get');
+        Route::put('{title_id}', 'update');
+        Route::delete('{title_id}', 'delete');
+    });
 
+    Route::prefix('categories')->controller(CategoryController::class)->group(function () {
+        Route::post('', 'create');
+        Route::get('', 'getList');
+        Route::get('{category_id}', 'get');
+        Route::put('{category_id}', 'update');
+        Route::delete('{category_id}', 'delete');
+    });
 
-Route::prefix('categories')->middleware('auth:sanctum')->controller(CategoryController::class)->group(function () {
-    Route::post('', 'create');
-    Route::get('', 'getList');
-    Route::get('{category_id}', 'get');
-    Route::put('{category_id}', 'update');
-    Route::delete('{category_id}', 'delete');
-});
-
-Route::prefix('tasks')->middleware('auth:sanctum')->controller(TaskController::class)->group(function () {
-    Route::post('{task_title_id}', 'create');
-    Route::get('{task_title_id}', 'getList');
-    Route::put('{task_id}', 'update');
-    Route::delete('{task_id}', 'delete');
+    Route::prefix('tasks')->controller(TaskController::class)->group(function () {
+        Route::post('{task_title_id}', 'create');
+        Route::get('{task_title_id}', 'getList');
+        Route::put('{task_id}', 'update');
+        Route::delete('{task_id}', 'delete');
+    });
 });
