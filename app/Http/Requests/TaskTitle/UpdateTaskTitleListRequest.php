@@ -29,10 +29,10 @@ class UpdateTaskTitleListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|nullable',
-            'due_date' => 'date_format:Y-m-d H:i:s|nullable',
-            'categories' => 'array|nullable',
-            'categories:*' => ['string', $this->categoryRule]
+            'name' => 'string',
+            'due_date' => 'date_format:Y-m-d H:i:s',
+            'categories' => 'array',
+            'categories.*' => ['string', $this->categoryRule]
         ];
     }
 }

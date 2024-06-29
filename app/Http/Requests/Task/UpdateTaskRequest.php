@@ -23,8 +23,8 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'integer|in:0,1|nullable',
-            'name' => 'string|nullable'
+            'status' => 'integer|in:0,1',
+            'name' => 'string'
         ];
     }
 }
