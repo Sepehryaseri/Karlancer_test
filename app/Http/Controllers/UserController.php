@@ -17,6 +17,11 @@ class UserController extends Controller
     {
     }
 
+    /**
+     * @lrd:start
+     * @LRDparam password_confirmation string|min:5|required
+     * @lrd:end
+    */
     public function register(RegisterUserRequest $request)
     {
         $data = $request->validated();
