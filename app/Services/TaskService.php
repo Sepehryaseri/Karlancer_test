@@ -69,7 +69,7 @@ class TaskService
             $taskId = $this->deHash($taskHashId, 'task');
             $task = $this->taskRepository->getTask($taskId, $this->user->id);
             if (!isset($task)) {
-                throw new NotFoundResourceException(message: __('task.not_fount'), code: Response::HTTP_NOT_FOUND);
+                throw new NotFoundResourceException(message: __('task.not_found'), code: Response::HTTP_NOT_FOUND);
             }
             return [
                 'status' => Response::HTTP_OK,

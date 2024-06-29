@@ -18,7 +18,7 @@ class DueDateRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (date('Y-m-d H:i:s', strtotime($value)) < date('Y-m-d H:i:s')) {
-            $fail('task_title.due_date_passed')->translate();
+            $fail('taskTitle.due_date_passed')->translate();
         }
     }
 }
