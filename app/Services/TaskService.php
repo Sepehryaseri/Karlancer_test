@@ -15,7 +15,7 @@ class TaskService
 {
     use Exceptionable, HashIdConverter;
 
-    protected User $user;
+    protected ?User $user;
 
     public function __construct(protected TaskRepositoryInterface $taskRepository,
                                 protected TaskTitleService $taskTitleService)
