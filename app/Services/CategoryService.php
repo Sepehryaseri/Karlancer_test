@@ -15,7 +15,7 @@ class CategoryService
 {
     use Exceptionable, HashIdConverter;
 
-    protected User $user;
+    protected ?User $user;
 
     public function __construct(protected CategoryRepositoryInterface $categoryRepository)
     {
